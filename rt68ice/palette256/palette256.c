@@ -7,12 +7,6 @@
 /* The palette is displayed as sixteen rows. */
 #define GRID_ROWS 16
 
-/* Each swatch is twenty pixels wide: 16 * 20 equals the 320-pixel screen width. */
-#define SWATCH_WIDTH 20
-
-/* Each swatch is fifteen pixels high: 16 * 15 equals the 240-pixel screen height. */
-#define SWATCH_HEIGHT 15
-
 /* Start execution at the operating-system entry point for this application. */
 int main(void)
 {
@@ -30,6 +24,12 @@ int main(void)
 
     /* Hold the four inclusive coordinates required by v_bar(). */
     short rectangle[4];
+
+    /* Store the current screen width in pixels after VDI reports it. */
+    short screen_width;
+
+    /* Store the current screen height in pixels after VDI reports it. */
+    short screen_height;
 
     /* Use one counter for VDI setup and for the 256 palette entries. */
     short colour;
@@ -53,6 +53,12 @@ int main(void)
     /* Open the workstation and receive its usable handle and capability information. */
     v_opnvwk(work_in, &handle, work_out);
 
+    /* Convert VDI's maximum X coordinate to the number of horizontal pixels. */
+    screen_width = work_out[0] + 1;
+
+    /* Convert VDI's maximum Y coordinate to the number of vertical pixels. */
+    screen_height = work_out[1] + 1;
+
     /* Draw one rectangle for each of the 256 palette indices. */
     for (colour = 0; colour < GRID_COLUMNS * GRID_ROWS; colour++) {
         /* Use opaque, solid fills rather than a patterned fill style. */
@@ -61,17 +67,17 @@ int main(void)
         /* Select this palette index as the fill colour. */
         vsf_color(handle, colour);
 
-        /* Set the left edge from the column number, which is the low four bits. */
-        rectangle[0] = (colour % GRID_COLUMNS) * SWATCH_WIDTH;
+        /* Set the left edge as this column's fraction of the reported screen width. */
+        rectangle[0] = (colour % GRID_COLUMNS) * screen_width / GRID_COLUMNS;
 
-        /* Set the top edge from the row number, which is the upper four bits. */
-        rectangle[1] = (colour / GRID_COLUMNS) * SWATCH_HEIGHT;
+        /* Set the top edge as this row's fraction of the reported screen height. */
+        rectangle[1] = (colour / GRID_COLUMNS) * screen_height / GRID_ROWS;
 
-        /* Set the inclusive right edge one pixel before the next swatch. */
-        rectangle[2] = rectangle[0] + SWATCH_WIDTH - 1;
+        /* Set the right edge one pixel before the following column begins. */
+        rectangle[2] = ((colour % GRID_COLUMNS + 1) * screen_width / GRID_COLUMNS) - 1;
 
-        /* Set the inclusive bottom edge one pixel before the next swatch. */
-        rectangle[3] = rectangle[1] + SWATCH_HEIGHT - 1;
+        /* Set the bottom edge one pixel before the following row begins. */
+        rectangle[3] = ((colour / GRID_COLUMNS + 1) * screen_height / GRID_ROWS) - 1;
 
         /* Fill the rectangle through VDI, which handles RT68ICE's planar layout. */
         v_bar(handle, rectangle);
