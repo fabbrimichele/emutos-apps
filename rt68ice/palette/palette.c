@@ -31,6 +31,27 @@ int main(void)
     /* Store the current screen height in pixels after VDI reports it. */
     short screen_height;
 
+    /* Provide unused message storage required by evnt_multi(), even though messages are not requested. */
+    short message[8];
+
+    /* Receive the mouse X coordinate reported by the event wait. */
+    short mouse_x;
+
+    /* Receive the mouse Y coordinate reported by the event wait. */
+    short mouse_y;
+
+    /* Receive the current mouse-button state reported by the event wait. */
+    short mouse_buttons;
+
+    /* Receive the keyboard modifier state reported by the event wait. */
+    short key_state;
+
+    /* Receive the pressed key code when a keyboard event ends the wait. */
+    short key_code;
+
+    /* Receive the number of mouse clicks when a button event ends the wait. */
+    short click_count;
+
     /* Use one counter for VDI setup and for the 256 palette entries. */
     short colour;
 
@@ -83,8 +104,12 @@ int main(void)
         v_bar(handle, rectangle);
     }
 
-    /* Wait for a key so the completed chart remains visible. */
-    evnt_keybd();
+    /* Wait until either a key is pressed or the left mouse button is clicked. */
+    evnt_multi(MU_KEYBD | MU_BUTTON, 1, 1, 1,
+               0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0,
+               message, 0,
+               &mouse_x, &mouse_y, &mouse_buttons, &key_state, &key_code, &click_count);
 
     /* Release the virtual workstation before this program exits. */
     v_clsvwk(handle);

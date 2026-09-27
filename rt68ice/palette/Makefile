@@ -1,5 +1,5 @@
 # Name of the Atari program, without its filename extension.
-NAME := palette256
+NAME := palette
 
 # Atari executable extension used by this project.
 TYPE := prg
