@@ -3,6 +3,12 @@
 Programs are compiled with [m68k-atari-mint](http://vincent.riviere.free.fr/soft/m68k-atari-mint/) that
 uses MiNTLib producing really big executable, hello.tos is more than 130KB.
 
+## File integrity testing
+
+[filetest](filetest/README.md) is a generic TOS/EmuTOS console test that writes,
+closes, reopens and verifies files through GEMDOS. It also supports verification
+after reboot and does not require RT68ICE-specific hardware.
+
 ## libcmini
 For small footprint install [libcmini](https://github.com/freemint/libcmini):
 * download latest release, e.g. [libcmini-0.54.tar.gz](https://github.com/freemint/libcmini/releases/download/v0.54/libcmini-0.54.tar.gz)
