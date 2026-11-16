@@ -9,6 +9,12 @@ uses MiNTLib producing really big executable, hello.tos is more than 130KB.
 closes, reopens and verifies files through GEMDOS. It also supports verification
 after reboot and does not require RT68ICE-specific hardware.
 
+## RT68ICE cache profiling
+
+[CACHSTAT.TOS](rt68ice/cachestat/README.md) controls the FPGA cache counters
+from EmuTOS: clear/start, stop/snapshot, show and resume. It requires the
+counter-enabled bitstream and prints 64-bit event and stall-cycle statistics.
+
 ## libcmini
 For small footprint install [libcmini](https://github.com/freemint/libcmini):
 * download latest release, e.g. [libcmini-0.54.tar.gz](https://github.com/freemint/libcmini/releases/download/v0.54/libcmini-0.54.tar.gz)
