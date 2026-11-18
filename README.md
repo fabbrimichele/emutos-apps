@@ -14,6 +14,9 @@ after reboot and does not require RT68ICE-specific hardware.
 [CACHSTAT.TOS](rt68ice/cachestat/README.md) controls the FPGA cache counters
 from EmuTOS: clear/start, stop/snapshot, show and resume. It requires the
 counter-enabled bitstream and prints 64-bit event and stall-cycle statistics.
+Its README records the [cache performance progression](rt68ice/cachestat/README.md#cache-performance-progression-2026-11-18),
+including the single-entry posted-write buffer's 5.97% CoreMark gain and the
+legacy write RAM-wait counter limitation.
 
 ## libcmini
 For small footprint install [libcmini](https://github.com/freemint/libcmini):
